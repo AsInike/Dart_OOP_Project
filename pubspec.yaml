@@ -1,0 +1,11 @@
+name: hospital_management_system
+description: A comprehensive hospital room and bed management system built with Dart OOP
+version: 1.0.0
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  # No external dependencies required for this project
+
+dev_dependencies:
+  lints: ^3.0.0

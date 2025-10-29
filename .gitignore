@@ -1,0 +1,25 @@
+# Dart specific
+.dart_tool/
+.packages
+build/
+pubspec.lock
+
+# IDE specific
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Backup files
+*~
+*.swp
+*.bak
+
+# Data backups (keep original data files)
+data/*.backup
+data/*.tmp
