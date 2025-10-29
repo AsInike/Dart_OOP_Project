@@ -1,6 +1,6 @@
 import 'enums.dart';
 
-/// Model class representing a hospital bed
+// Model class representing a hospital bed
 class Bed {
   final String id;
   final String roomId;
@@ -12,7 +12,7 @@ class Bed {
     this.status = BedStatus.available,
   });
 
-  /// Create a Bed from JSON
+  // Create a Bed from JSON
   factory Bed.fromJson(Map<String, dynamic> json) {
     return Bed(
       id: json['id'] as String,
@@ -21,7 +21,7 @@ class Bed {
     );
   }
 
-  /// Convert Bed to JSON
+  // Convert Bed to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -30,7 +30,7 @@ class Bed {
     };
   }
 
-  /// Create a copy of the bed with updated fields
+  // Create a copy of the bed with updated fields
   Bed copyWith({
     String? id,
     String? roomId,
@@ -43,17 +43,17 @@ class Bed {
     );
   }
 
-  /// Mark bed as occupied
+  // Mark bed as occupied
   void occupy() {
     status = BedStatus.occupied;
   }
 
-  /// Mark bed as available
+  // Mark bed as available
   void free() {
     status = BedStatus.available;
   }
 
-  /// Check if bed is available
+  // Check if bed is available
   bool get isAvailable => status == BedStatus.available;
 
   @override

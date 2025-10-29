@@ -17,7 +17,7 @@ class JsonBedRepository implements BedRepository {
     await _loadFromFile();
   }
 
-  /// Load beds from JSON file
+  /// Load beds from data/beds.json
   Future<void> _loadFromFile() async {
     try {
       final file = File(filePath);
@@ -34,7 +34,7 @@ class JsonBedRepository implements BedRepository {
     }
   }
 
-  /// Save beds to JSON file
+  /// Save beds to data/beds.json
   Future<void> _saveToFile() async {
     try {
       final file = File(filePath);

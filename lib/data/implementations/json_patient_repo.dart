@@ -15,7 +15,7 @@ class JsonPatientRepository implements PatientRepository {
     await _loadFromFile();
   }
 
-  /// Load patients from JSON file
+  /// Load patients from data/patients.json
   Future<void> _loadFromFile() async {
     try {
       final file = File(filePath);
@@ -32,7 +32,7 @@ class JsonPatientRepository implements PatientRepository {
     }
   }
 
-  /// Save patients to JSON file
+  /// Save patients to data/patients.json
   Future<void> _saveToFile() async {
     try {
       final file = File(filePath);

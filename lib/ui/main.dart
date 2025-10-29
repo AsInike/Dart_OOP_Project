@@ -1,9 +1,9 @@
 import 'dart:io';
-import '../../domain/models/enums.dart';
-import '../../domain/services/hospital_service.dart';
-import '../../data/implementations/json_room_repo.dart';
-import '../../data/implementations/json_bed_repo.dart';
-import '../../data/implementations/json_patient_repo.dart';
+import '../domain/models/enums.dart';
+import '../domain/services/hospital_service.dart';
+import '../data/implementations/json_room_repo.dart';
+import '../data/implementations/json_bed_repo.dart';
+import '../data/implementations/json_patient_repo.dart';
 
 /// Command-Line Interface for Hospital Management System
 class HospitalCLI {

@@ -15,7 +15,7 @@ class JsonRoomRepository implements RoomRepository {
     await _loadFromFile();
   }
 
-  /// Load rooms from JSON file
+  /// Load rooms from data/rooms.json
   Future<void> _loadFromFile() async {
     try {
       final file = File(filePath);
@@ -32,7 +32,7 @@ class JsonRoomRepository implements RoomRepository {
     }
   }
 
-  /// Save rooms to JSON file
+  /// Save rooms to datta/rooms.json
   Future<void> _saveToFile() async {
     try {
       final file = File(filePath);

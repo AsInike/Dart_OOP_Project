@@ -1,4 +1,4 @@
-/// Model class representing a hospital room
+// Model class representing a hospital room
 class Room {
   final String id;
   final String name;
@@ -12,7 +12,7 @@ class Room {
     required this.capacity,
   });
 
-  /// Create a Room from JSON
+  // Create a Room from JSON
   factory Room.fromJson(Map<String, dynamic> json) {
     return Room(
       id: json['id'] as String,
@@ -22,7 +22,7 @@ class Room {
     );
   }
 
-  /// Convert Room to JSON
+  // Convert Room to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -32,7 +32,7 @@ class Room {
     };
   }
 
-  /// Create a copy of the room with updated fields
+  // Create a copy of the room with updated fields
   Room copyWith({
     String? id,
     String? name,

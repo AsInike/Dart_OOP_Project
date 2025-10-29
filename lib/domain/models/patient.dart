@@ -1,6 +1,6 @@
 import 'enums.dart';
 
-/// Model class representing a patient
+// Model class representing a patient
 class Patient {
   final String id;
   final String name;
@@ -20,7 +20,7 @@ class Patient {
     this.assignedBedId,
   });
 
-  /// Create a Patient from JSON
+  // Create a Patient from JSON
   factory Patient.fromJson(Map<String, dynamic> json) {
     return Patient(
       id: json['id'] as String,
@@ -35,7 +35,7 @@ class Patient {
     );
   }
 
-  /// Convert Patient to JSON
+  // Convert Patient to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -48,7 +48,7 @@ class Patient {
     };
   }
 
-  /// Create a copy of the patient with updated fields
+  // Create a copy of the patient with updated fields
   Patient copyWith({
     String? id,
     String? name,
@@ -69,10 +69,10 @@ class Patient {
     );
   }
 
-  /// Check if patient is currently admitted (not discharged)
+  // Check if patient is currently admitted (not discharged)
   bool get isAdmitted => dischargeDate == null;
 
-  /// Calculate length of stay in days
+  // Calculate length of stay in days
   int get lengthOfStay {
     final endDate = dischargeDate ?? DateTime.now();
     return endDate.difference(admissionDate).inDays;
