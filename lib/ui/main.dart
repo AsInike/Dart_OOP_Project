@@ -1,9 +1,9 @@
 import 'dart:io';
 import '../domain/models/enums.dart';
 import '../domain/services/hospital_service.dart';
-import '../data/implementations/json_room_repo.dart';
-import '../data/implementations/json_bed_repo.dart';
-import '../data/implementations/json_patient_repo.dart';
+import '../data/room_repository.dart';
+import '../data/bed_repository.dart';
+import '../data/patient_repository.dart';
 
 /// Command-Line Interface for Hospital Management System
 class HospitalCLI {
@@ -37,6 +37,13 @@ class HospitalCLI {
       bedRepository: bedRepo,
       patientRepository: patientRepo,
     );
+
+    // Process any expired discharges and free beds automatically
+    print('Checking for expired discharges...');
+    final bedsFreed = await hospitalService.processExpiredDischarges();
+    if (bedsFreed == 0) {
+      print('No expired discharges found.');
+    }
 
     print('System initialized successfully!\n');
   }

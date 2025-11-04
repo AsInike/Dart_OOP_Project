@@ -1,4 +1,3 @@
-// Enum representing the status of a bed
 enum BedStatus {
   available,
   occupied;
@@ -13,7 +12,6 @@ enum BedStatus {
     }
   }
 
-  // Convert string to BedStatus enum
   static BedStatus fromString(String status) {
     switch (status.toLowerCase()) {
       case 'available':
@@ -26,7 +24,6 @@ enum BedStatus {
   }
 }
 
-// Enum representing patient gender
 enum Gender {
   male,
   female,
@@ -44,7 +41,6 @@ enum Gender {
     }
   }
 
-  // Convert string to Gender enum
   static Gender fromString(String gender) {
     switch (gender.toLowerCase()) {
       case 'male':

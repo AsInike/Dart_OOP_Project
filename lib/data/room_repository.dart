@@ -1,7 +1,33 @@
 import 'dart:io';
 import 'dart:convert';
-import '../../domain/models/room.dart';
-import '../repositories/room_repository.dart';
+import '../domain/models/room.dart';
+
+/// Abstract repository interface for Room operations
+abstract class RoomRepository {
+  /// Get all rooms
+  Future<List<Room>> getAllRooms();
+
+  /// Get a room by ID
+  Future<Room?> getRoomById(String id);
+
+  /// Get rooms by department
+  Future<List<Room>> getRoomsByDepartment(String department);
+
+  /// Add a new room
+  Future<void> addRoom(Room room);
+
+  /// Update an existing room
+  Future<void> updateRoom(Room room);
+
+  /// Delete a room
+  Future<void> deleteRoom(String id);
+
+  /// Check if a room exists
+  Future<bool> roomExists(String id);
+
+  /// Save all rooms to storage
+  Future<void> saveRooms(List<Room> rooms);
+}
 
 /// JSON implementation of RoomRepository
 class JsonRoomRepository implements RoomRepository {
@@ -15,7 +41,7 @@ class JsonRoomRepository implements RoomRepository {
     await _loadFromFile();
   }
 
-  /// Load rooms from data/rooms.json
+  /// Load rooms from JSON file
   Future<void> _loadFromFile() async {
     try {
       final file = File(filePath);
@@ -32,7 +58,7 @@ class JsonRoomRepository implements RoomRepository {
     }
   }
 
-  /// Save rooms to datta/rooms.json
+  /// Save rooms to JSON file
   Future<void> _saveToFile() async {
     try {
       final file = File(filePath);
@@ -61,7 +87,8 @@ class JsonRoomRepository implements RoomRepository {
   @override
   Future<List<Room>> getRoomsByDepartment(String department) async {
     return _rooms
-        .where((room) => room.department.toLowerCase() == department.toLowerCase())
+        .where((room) =>
+            room.department.toLowerCase() == department.toLowerCase())
         .toList();
   }
 
