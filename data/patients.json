@@ -1,1 +1,83 @@
-[{"id":"P001","name":"John Smith","gender":"male","age":45,"admissionDate":"2025-10-25T08:30:00.000Z","dischargeDate":"2025-10-29T12:30:32.803892","assignedBedId":"B002"},{"id":"P002","name":"Emily Johnson","gender":"female","age":32,"admissionDate":"2025-10-26T14:15:00.000Z","dischargeDate":null,"assignedBedId":"B007"},{"id":"P003","name":"Michael Brown","gender":"male","age":67,"admissionDate":"2025-10-27T10:00:00.000Z","dischargeDate":null,"assignedBedId":"B009"},{"id":"P004","name":"Sarah Davis","gender":"female","age":8,"admissionDate":"2025-10-28T09:45:00.000Z","dischargeDate":null,"assignedBedId":"B013"},{"id":"P005","name":"koko lala","gender":"male","age":54,"admissionDate":"2025-10-29T12:34:15.478092","dischargeDate":null,"assignedBedId":"B010"},{"id":"P006","name":"Jennifer Martinez","gender":"female","age":41,"admissionDate":"2025-10-20T11:00:00.000Z","dischargeDate":"2025-10-24T15:30:00.000Z","assignedBedId":"B005"},{"id":"P007","name":"lkfsaf","gender":"male","age":32,"admissionDate":"2025-10-29T12:36:09.685835","dischargeDate":null,"assignedBedId":"B011"}]
+[
+  {
+    "id": "P001",
+    "name": "John Smith",
+    "gender": "male",
+    "age": 45,
+    "admissionDate": "2025-10-25T08:30:00.000Z",
+    "dischargeDate": "2025-10-29T12:30:32.803892",
+    "assignedBedId": "B002"
+  },
+  {
+    "id": "P002",
+    "name": "Emily Johnson",
+    "gender": "female",
+    "age": 32,
+    "admissionDate": "2025-10-26T14:15:00.000Z",
+    "dischargeDate": null,
+    "assignedBedId": "B007"
+  },
+  {
+    "id": "P003",
+    "name": "Michael Brown",
+    "gender": "male",
+    "age": 67,
+    "admissionDate": "2025-10-27T10:00:00.000Z",
+    "dischargeDate": null,
+    "assignedBedId": "B009"
+  },
+  {
+    "id": "P004",
+    "name": "Sarah Davis",
+    "gender": "female",
+    "age": 8,
+    "admissionDate": "2025-10-28T09:45:00.000Z",
+    "dischargeDate": null,
+    "assignedBedId": "B013"
+  },
+  {
+    "id": "P005",
+    "name": "koko lala",
+    "gender": "male",
+    "age": 54,
+    "admissionDate": "2025-10-29T12:34:15.478092",
+    "dischargeDate": null,
+    "assignedBedId": "B010"
+  },
+  {
+    "id": "P006",
+    "name": "Jennifer Martinez",
+    "gender": "female",
+    "age": 41,
+    "admissionDate": "2025-10-20T11:00:00.000Z",
+    "dischargeDate": "2025-10-24T15:30:00.000Z",
+    "assignedBedId": "B005"
+  },
+  {
+    "id": "P007",
+    "name": "lkfsaf",
+    "gender": "male",
+    "age": 32,
+    "admissionDate": "2025-10-29T12:36:09.685835",
+    "dischargeDate": null,
+    "assignedBedId": "B011"
+  },
+  {
+    "id": "P999",
+    "name": "Test Patient",
+    "gender": "male",
+    "age": 35,
+    "admissionDate": "2025-11-04T11:29:36.587304",
+    "dischargeDate": "2025-11-04T11:29:36.588616",
+    "assignedBedId": "B020"
+  },
+  {
+    "id": "P008",
+    "name": "Alaska",
+    "gender": "female",
+    "age": 24,
+    "admissionDate": "2025-11-04T11:33:08.428479",
+    "dischargeDate": null,
+    "assignedBedId": "B020"
+  }
+]

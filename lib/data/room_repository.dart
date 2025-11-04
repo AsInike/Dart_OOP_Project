@@ -64,7 +64,8 @@ class JsonRoomRepository implements RoomRepository {
       final file = File(filePath);
       await file.parent.create(recursive: true);
       final jsonList = _rooms.map((room) => room.toJson()).toList();
-      await file.writeAsString(json.encode(jsonList));
+      const encoder = JsonEncoder.withIndent('  ');
+      await file.writeAsString(encoder.convert(jsonList));
     } catch (e) {
       print('Error saving rooms: $e');
     }

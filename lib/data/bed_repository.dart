@@ -72,7 +72,8 @@ class JsonBedRepository implements BedRepository {
       final file = File(filePath);
       await file.parent.create(recursive: true);
       final jsonList = _beds.map((bed) => bed.toJson()).toList();
-      await file.writeAsString(json.encode(jsonList));
+      const encoder = JsonEncoder.withIndent('  ');
+      await file.writeAsString(encoder.convert(jsonList));
     } catch (e) {
       print('Error saving beds: $e');
     }

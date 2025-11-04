@@ -1,0 +1,147 @@
+@startuml Domain_Layer_UML
+
+' Enumerations
+enum BedStatus {
+  available
+  occupied
+  --
+  +toString(): String
+  +fromString(String): BedStatus
+}
+
+enum Gender {
+  male
+  female
+  other
+  --
+  +toString(): String
+  +fromString(String): Gender
+}
+
+' Models
+class Room {
+  -id: String
+  -name: String
+  -department: String
+  -capacity: int
+  --
+  +Room(id, name, department, capacity)
+  +fromJson(Map): Room
+  +toJson(): Map<String, dynamic>
+  +copyWith(...): Room
+  +toString(): String
+  +operator==(Object): bool
+  +hashCode: int
+}
+
+class Bed {
+  -id: String
+  -roomId: String
+  -status: BedStatus
+  --
+  +Bed(id, roomId, status)
+  +fromJson(Map): Bed
+  +toJson(): Map<String, dynamic>
+  +occupy(): void
+  +free(): void
+  +isAvailable: bool
+  +copyWith(...): Bed
+  +toString(): String
+  +operator==(Object): bool
+  +hashCode: int
+}
+
+class Patient {
+  -id: String
+  -name: String
+  -gender: Gender
+  -age: int
+  -admissionDate: DateTime
+  -dischargeDate: DateTime?
+  -assignedBedId: String?
+  --
+  +Patient(...)
+  +fromJson(Map): Patient
+  +toJson(): Map<String, dynamic>
+  +copyWith(...): Patient
+  +isAdmitted: bool
+  +lengthOfStay: int
+  +toString(): String
+  +operator==(Object): bool
+  +hashCode: int
+}
+
+' Service Layer
+class HospitalService {
+  -roomRepository: RoomRepository
+  -bedRepository: BedRepository
+  -patientRepository: PatientRepository
+  --
+  +HospitalService(roomRepo, bedRepo, patientRepo)
+  .. System Initialization ..
+  +processExpiredDischarges(): Future<int>
+  +syncBedAvailability(): Future<void>
+  .. Room Management ..
+  +addRoom(...): Future<void>
+  +getAllRooms(): Future<List<Room>>
+  +getRoomById(id): Future<Room?>
+  +getRoomsByDepartment(dept): Future<List<Room>>
+  +updateRoom(room): Future<void>
+  +deleteRoom(id): Future<void>
+  .. Bed Management ..
+  +addBed(...): Future<void>
+  +getAllBeds(): Future<List<Bed>>
+  +getBedById(id): Future<Bed?>
+  +getBedsByRoomId(roomId): Future<List<Bed>>
+  +deleteBed(id): Future<void>
+  .. Patient Management ..
+  +admitPatient(patientId, dept): Future<void>
+  +registerPatient(...): Future<void>
+  +dischargePatient(patientId): Future<void>
+  +getAllPatients(): Future<List<Patient>>
+  +getAdmittedPatients(): Future<List<Patient>>
+  +getPatientById(id): Future<Patient?>
+  .. Reporting ..
+  +generateBedSummaryReport(): Future<Map>
+  +generateDetailedReport(): Future<String>
+}
+
+' Relationships
+Bed --> BedStatus : uses
+Patient --> Gender : uses
+
+HospitalService --> Room : manages
+HospitalService --> Bed : manages
+HospitalService --> Patient : manages
+
+HospitalService ..> RoomRepository : depends on
+HospitalService ..> BedRepository : depends on
+HospitalService ..> PatientRepository : depends on
+
+note right of HospitalService
+  **Business Logic Layer**
+  - Orchestrates operations
+  - Enforces domain rules
+  - Coordinates repositories
+  - No direct data access
+end note
+
+note left of Room
+  **Domain Models**
+  - Immutable data structures
+  - JSON serialization
+  - Value equality
+  - No business logic
+end note
+
+note bottom of BedStatus
+  Type-safe status
+  representation
+end note
+
+note bottom of Gender
+  Type-safe gender
+  representation
+end note
+
+@enduml

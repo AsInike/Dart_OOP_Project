@@ -45,6 +45,13 @@ class HospitalCLI {
       print('No expired discharges found.');
     }
 
+    // Sync bed availability with patient assignments
+    print('Synchronizing bed availability...');
+    final bedsSynced = await hospitalService.syncBedAvailability();
+    if (bedsSynced == 0) {
+      print('All bed statuses are synchronized.');
+    }
+
     print('System initialized successfully!\n');
   }
 
@@ -135,25 +142,29 @@ class HospitalCLI {
 
   Future<void> addRoom() async {
     print('\n--- Add New Room ---');
-    final id = readInput('Enter Room ID: ');
-    final name = readInput('Enter Room Name: ');
-    final department = readInput('Enter Department: ');
-    final capacityStr = readInput('Enter Capacity: ');
-    final capacity = int.tryParse(capacityStr);
+    try {
+      final id = readInput('Enter Room ID: ');
+      final name = readInput('Enter Room Name: ');
+      final department = readInput('Enter Department: ');
+      final capacityStr = readInput('Enter the numbers of bed in this room: ');
+      final capacity = int.tryParse(capacityStr);
 
-    if (capacity == null || capacity <= 0) {
-      print('Invalid capacity. Must be a positive number.');
-      return;
+      if (capacity == null || capacity <= 0) {
+        print('Invalid capacity. Must be a positive number.');
+        return;
+      }
+
+      await hospitalService.addRoom(
+        id: id,
+        name: name,
+        department: department,
+        capacity: capacity,
+      );
+
+      print('✓ Room added successfully!\n');
+    } catch (e) {
+      print('✗ Error: $e\n');
     }
-
-    await hospitalService.addRoom(
-      id: id,
-      name: name,
-      department: department,
-      capacity: capacity,
-    );
-
-    print('Room added successfully!\n');
   }
 
   Future<void> viewAllRooms() async {
@@ -201,46 +212,54 @@ class HospitalCLI {
 
   Future<void> updateRoom() async {
     print('\n--- Update Room ---');
-    final id = readInput('Enter Room ID to update: ');
-    final room = await hospitalService.getRoomById(id);
+    try {
+      final id = readInput('Enter Room ID to update: ');
+      final room = await hospitalService.getRoomById(id);
 
-    if (room == null) {
-      print('Room not found.\n');
-      return;
+      if (room == null) {
+        print('Room not found.\n');
+        return;
+      }
+
+      print('Current details:');
+      print('Name: ${room.name}');
+      print('Department: ${room.department}');
+      print('Capacity: ${room.capacity}');
+      print("");
+
+      final name = readInput('Enter new name (or press Enter to keep "${room.name}"): ');
+      final department = readInput('Enter new department (or press Enter to keep "${room.department}"): ');
+      final capacityStr = readInput('Enter new capacity (or press Enter to keep ${room.capacity}): ');
+
+      final updatedRoom = room.copyWith(
+        name: name.isEmpty ? null : name,
+        department: department.isEmpty ? null : department,
+        capacity: capacityStr.isEmpty ? null : int.tryParse(capacityStr),
+      );
+
+      await hospitalService.updateRoom(updatedRoom);
+      print('✓ Room updated successfully!\n');
+    } catch (e) {
+      print('✗ Error: $e\n');
     }
-
-    print('Current details:');
-    print('Name: ${room.name}');
-    print('Department: ${room.department}');
-    print('Capacity: ${room.capacity}');
-    print("");
-
-    final name = readInput('Enter new name (or press Enter to keep "${room.name}"): ');
-    final department = readInput('Enter new department (or press Enter to keep "${room.department}"): ');
-    final capacityStr = readInput('Enter new capacity (or press Enter to keep ${room.capacity}): ');
-
-    final updatedRoom = room.copyWith(
-      name: name.isEmpty ? null : name,
-      department: department.isEmpty ? null : department,
-      capacity: capacityStr.isEmpty ? null : int.tryParse(capacityStr),
-    );
-
-    await hospitalService.updateRoom(updatedRoom);
-    print('Room updated successfully!\n');
   }
 
   Future<void> deleteRoom() async {
     print('\n--- Delete Room ---');
-    final id = readInput('Enter Room ID to delete: ');
-    
-    final confirm = readInput('Are you sure you want to delete room $id? (yes/no): ');
-    if (confirm.toLowerCase() != 'yes') {
-      print('Deletion cancelled.\n');
-      return;
-    }
+    try {
+      final id = readInput('Enter Room ID to delete: ');
+      
+      final confirm = readInput('Are you sure you want to delete room $id? (yes/no): ');
+      if (confirm.toLowerCase() != 'yes') {
+        print('Deletion cancelled.\n');
+        return;
+      }
 
-    await hospitalService.deleteRoom(id);
-    print('Room deleted successfully!\n');
+      await hospitalService.deleteRoom(id);
+      print('✓ Room deleted successfully!\n');
+    } catch (e) {
+      print('✗ Error: $e\n');
+    }
   }
 
   // ========== BED MANAGEMENT ==========
@@ -277,26 +296,28 @@ class HospitalCLI {
 
   Future<void> addBed() async {
     print('\n--- Add New Bed ---');
-    
-    // Show available rooms
-    final rooms = await hospitalService.getAllRooms();
-    if (rooms.isEmpty) {
-      print('No rooms available. Please add a room first.\n');
-      return;
+    try {
+      final rooms = await hospitalService.getAllRooms();
+      if (rooms.isEmpty) {
+        print('No rooms available. Please add a room first.\n');
+        return;
+      }
+
+      print('Available Rooms:');
+      for (final room in rooms) {
+        final beds = await hospitalService.getBedsByRoomId(room.id);
+        print('${room.id} - ${room.name} (${room.department}) - ${beds.length}/${room.capacity} beds');
+      }
+      print("");
+
+      final bedId = readInput('Enter Bed ID: ');
+      final roomId = readInput('Enter Room ID: ');
+
+      await hospitalService.addBed(id: bedId, roomId: roomId);
+      print('✓ Bed added successfully!\n');
+    } catch (e) {
+      print('✗ Error: $e\n');
     }
-
-    print('Available Rooms:');
-    for (final room in rooms) {
-      final beds = await hospitalService.getBedsByRoomId(room.id);
-      print('${room.id} - ${room.name} (${room.department}) - ${beds.length}/${room.capacity} beds');
-    }
-    print("");
-
-    final bedId = readInput('Enter Bed ID: ');
-    final roomId = readInput('Enter Room ID: ');
-
-    await hospitalService.addBed(id: bedId, roomId: roomId);
-    print('Bed added successfully!\n');
   }
 
   Future<void> viewAllBeds() async {
@@ -353,138 +374,178 @@ class HospitalCLI {
 
   Future<void> deleteBed() async {
     print('\n--- Delete Bed ---');
-    final id = readInput('Enter Bed ID to delete: ');
-    
-    final confirm = readInput('Are you sure you want to delete bed $id? (yes/no): ');
-    if (confirm.toLowerCase() != 'yes') {
-      print('Deletion cancelled.\n');
-      return;
-    }
+    try {
+      final id = readInput('Enter Bed ID to delete: ');
+      
+      final confirm = readInput('Are you sure you want to delete bed $id? (yes/no): ');
+      if (confirm.toLowerCase() != 'yes') {
+        print('Deletion cancelled.\n');
+        return;
+      }
 
-    await hospitalService.deleteBed(id);
-    print('Bed deleted successfully!\n');
+      await hospitalService.deleteBed(id);
+      print('✓ Bed deleted successfully!\n');
+    } catch (e) {
+      print('✗ Error: $e\n');
+    }
   }
 
   // ========== PATIENT MANAGEMENT ==========
 
   Future<void> managePatients() async {
     print('\n--- Patient Management ---');
-    print('1. Admit Patient');
-    print('2. Discharge Patient');
-    print('3. View All Patients');
-    print('4. View Admitted Patients');
-    print('5. View Patient Details');
-    print('6. Back to Main Menu');
+    print('1. Register New Patient');
+    print('2. Admit Patient');
+    print('3. Discharge Patient');
+    print('4. View All Patients');
+    print('5. View Admitted Patients');
+    print('6. View Patient Details');
+    print('7. Back to Main Menu');
 
     final choice = readInput('Enter your choice: ');
 
     switch (choice) {
       case '1':
-        await admitPatient();
+        await registerPatient();
         break;
       case '2':
-        await dischargePatient();
+        await admitPatient();
         break;
       case '3':
-        await viewAllPatients();
+        await dischargePatient();
         break;
       case '4':
-        await viewAdmittedPatients();
+        await viewAllPatients();
         break;
       case '5':
-        await viewPatientDetails();
+        await viewAdmittedPatients();
         break;
       case '6':
+        await viewPatientDetails();
+        break;
+      case '7':
         return;
       default:
         print('Invalid choice.');
     }
   }
 
+  Future<void> registerPatient() async {
+    print('\n--- Register New Patient ---');
+    try {
+      final patientId = readInput('Enter Patient ID: ');
+      final name = readInput('Enter Patient Name: ');
+      
+      print('Gender: 1) Male  2) Female  3) Other');
+      final genderChoice = readInput('Select gender: ');
+      Gender gender;
+      switch (genderChoice) {
+        case '1':
+          gender = Gender.male;
+          break;
+        case '2':
+          gender = Gender.female;
+          break;
+        case '3':
+          gender = Gender.other;
+          break;
+        default:
+          print('Invalid gender choice. Defaulting to Other.');
+          gender = Gender.other;
+      }
+
+      final ageStr = readInput('Enter Patient Age: ');
+      final age = int.tryParse(ageStr);
+
+      if (age == null || age <= 0) {
+        print('Invalid age.\n');
+        return;
+      }
+
+      await hospitalService.registerPatient(
+        patientId: patientId,
+        name: name,
+        gender: gender,
+        age: age,
+      );
+
+      print('✓ Patient registered successfully!\n');
+    } catch (e) {
+      print('✗ Error: $e\n');
+    }
+  }
+
   Future<void> admitPatient() async {
     print('\n--- Admit Patient ---');
-    
-    // Show available departments
-    final bedSummary = await hospitalService.generateBedSummaryReport();
-    if (bedSummary.isEmpty) {
-      print('No beds available in any department.\n');
-      return;
+    try {
+      // Show all registered patients
+      final allPatients = await hospitalService.getAllPatients();
+      if (allPatients.isEmpty) {
+        print('No patients registered. Please register a patient first.\n');
+        return;
+      }
+
+      print('Registered Patients:');
+      for (final patient in allPatients) {
+        final status = patient.isAdmitted ? '(Currently Admitted)' : '(Not Admitted)';
+        print('${patient.id} - ${patient.name} $status');
+      }
+      print("");
+
+      final bedSummary = await hospitalService.generateBedSummaryReport();
+      if (bedSummary.isEmpty) {
+        print('No beds available in any department.\n');
+        return;
+      }
+
+      print('Bed Availability by Department:');
+      for (final entry in bedSummary.entries) {
+        print('${entry.key}: ${entry.value['available']} available beds');
+      }
+      print("");
+
+      final patientId = readInput('Enter Patient ID to admit: ');
+      final department = readInput('Enter Department: ');
+
+      await hospitalService.admitPatient(
+        patientId: patientId,
+        department: department,
+      );
+
+      print('✓ Patient admitted successfully!\n');
+    } catch (e) {
+      print('✗ Error: $e\n');
     }
-
-    print('Bed Availability by Department:');
-    for (final entry in bedSummary.entries) {
-      print('${entry.key}: ${entry.value['available']} available beds');
-    }
-    print("");
-
-    final patientId = readInput('Enter Patient ID: ');
-    final name = readInput('Enter Patient Name: ');
-    
-    print('Gender: 1) Male  2) Female  3) Other');
-    final genderChoice = readInput('Select gender: ');
-    Gender gender;
-    switch (genderChoice) {
-      case '1':
-        gender = Gender.male;
-        break;
-      case '2':
-        gender = Gender.female;
-        break;
-      case '3':
-        gender = Gender.other;
-        break;
-      default:
-        print('Invalid gender choice. Defaulting to Other.');
-        gender = Gender.other;
-    }
-
-    final ageStr = readInput('Enter Patient Age: ');
-    final age = int.tryParse(ageStr);
-
-    if (age == null || age <= 0) {
-      print('Invalid age.\n');
-      return;
-    }
-
-    final department = readInput('Enter Department: ');
-
-    await hospitalService.admitPatient(
-      patientId: patientId,
-      name: name,
-      gender: gender,
-      age: age,
-      department: department,
-    );
-
-    print('Patient admitted successfully!\n');
   }
 
   Future<void> dischargePatient() async {
     print('\n--- Discharge Patient ---');
-    
-    // Show admitted patients
-    final admittedPatients = await hospitalService.getAdmittedPatients();
-    if (admittedPatients.isEmpty) {
-      print('No patients currently admitted.\n');
-      return;
-    }
+    try {
+      final admittedPatients = await hospitalService.getAdmittedPatients();
+      if (admittedPatients.isEmpty) {
+        print('No patients currently admitted.\n');
+        return;
+      }
 
-    print('Currently Admitted Patients:');
-    for (final patient in admittedPatients) {
-      print('${patient.id} - ${patient.name} (Bed: ${patient.assignedBedId})');
-    }
-    print("");
+      print('Currently Admitted Patients:');
+      for (final patient in admittedPatients) {
+        print('${patient.id} - ${patient.name} (Bed: ${patient.assignedBedId})');
+      }
+      print("");
 
-    final patientId = readInput('Enter Patient ID to discharge: ');
-    
-    final confirm = readInput('Are you sure you want to discharge patient $patientId? (yes/no): ');
-    if (confirm.toLowerCase() != 'yes') {
-      print('Discharge cancelled.\n');
-      return;
-    }
+      final patientId = readInput('Enter Patient ID to discharge: ');
+      
+      final confirm = readInput('Are you sure you want to discharge patient $patientId? (yes/no): ');
+      if (confirm.toLowerCase() != 'yes') {
+        print('Discharge cancelled.\n');
+        return;
+      }
 
-    await hospitalService.dischargePatient(patientId);
-    print('Patient discharged successfully!\n');
+      await hospitalService.dischargePatient(patientId);
+      print('✓ Patient discharged successfully!\n');
+    } catch (e) {
+      print('✗ Error: $e\n');
+    }
   }
 
   Future<void> viewAllPatients() async {

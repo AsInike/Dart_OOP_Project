@@ -1,1 +1,132 @@
-[{"id":"B001","roomId":"R001","status":"available"},{"id":"B002","roomId":"R001","status":"available"},{"id":"B003","roomId":"R001","status":"available"},{"id":"B004","roomId":"R001","status":"available"},{"id":"B005","roomId":"R002","status":"available"},{"id":"B006","roomId":"R002","status":"available"},{"id":"B007","roomId":"R002","status":"occupied"},{"id":"B008","roomId":"R002","status":"available"},{"id":"B009","roomId":"R003","status":"occupied"},{"id":"B010","roomId":"R003","status":"occupied"},{"id":"B011","roomId":"R004","status":"occupied"},{"id":"B012","roomId":"R004","status":"available"},{"id":"B013","roomId":"R005","status":"occupied"},{"id":"B014","roomId":"R005","status":"available"},{"id":"B015","roomId":"R005","status":"available"},{"id":"B016","roomId":"R005","status":"available"},{"id":"B017","roomId":"R005","status":"available"},{"id":"B018","roomId":"R005","status":"available"},{"id":"B019","roomId":"R006","status":"available"},{"id":"B020","roomId":"R006","status":"available"},{"id":"B021","roomId":"R006","status":"available"},{"id":"B022","roomId":"R006","status":"available"},{"id":"B023","roomId":"R007","status":"available"},{"id":"B024","roomId":"R007","status":"available"},{"id":"B025","roomId":"R007","status":"available"},{"id":"B0027","roomId":"R008","status":"available"}]
+[
+  {
+    "id": "B001",
+    "roomId": "R001",
+    "status": "available"
+  },
+  {
+    "id": "B002",
+    "roomId": "R001",
+    "status": "available"
+  },
+  {
+    "id": "B003",
+    "roomId": "R001",
+    "status": "available"
+  },
+  {
+    "id": "B004",
+    "roomId": "R001",
+    "status": "available"
+  },
+  {
+    "id": "B005",
+    "roomId": "R002",
+    "status": "available"
+  },
+  {
+    "id": "B006",
+    "roomId": "R002",
+    "status": "available"
+  },
+  {
+    "id": "B007",
+    "roomId": "R002",
+    "status": "occupied"
+  },
+  {
+    "id": "B008",
+    "roomId": "R002",
+    "status": "available"
+  },
+  {
+    "id": "B009",
+    "roomId": "R003",
+    "status": "occupied"
+  },
+  {
+    "id": "B010",
+    "roomId": "R003",
+    "status": "occupied"
+  },
+  {
+    "id": "B011",
+    "roomId": "R004",
+    "status": "occupied"
+  },
+  {
+    "id": "B012",
+    "roomId": "R004",
+    "status": "available"
+  },
+  {
+    "id": "B013",
+    "roomId": "R005",
+    "status": "occupied"
+  },
+  {
+    "id": "B014",
+    "roomId": "R005",
+    "status": "available"
+  },
+  {
+    "id": "B015",
+    "roomId": "R005",
+    "status": "available"
+  },
+  {
+    "id": "B016",
+    "roomId": "R005",
+    "status": "available"
+  },
+  {
+    "id": "B017",
+    "roomId": "R005",
+    "status": "available"
+  },
+  {
+    "id": "B018",
+    "roomId": "R005",
+    "status": "available"
+  },
+  {
+    "id": "B019",
+    "roomId": "R006",
+    "status": "available"
+  },
+  {
+    "id": "B020",
+    "roomId": "R006",
+    "status": "available"
+  },
+  {
+    "id": "B021",
+    "roomId": "R006",
+    "status": "available"
+  },
+  {
+    "id": "B022",
+    "roomId": "R006",
+    "status": "available"
+  },
+  {
+    "id": "B023",
+    "roomId": "R007",
+    "status": "available"
+  },
+  {
+    "id": "B024",
+    "roomId": "R007",
+    "status": "available"
+  },
+  {
+    "id": "B025",
+    "roomId": "R007",
+    "status": "available"
+  },
+  {
+    "id": "B027",
+    "roomId": "R008",
+    "status": "available"
+  }
+]

@@ -67,7 +67,8 @@ class JsonPatientRepository implements PatientRepository {
       final file = File(filePath);
       await file.parent.create(recursive: true);
       final jsonList = _patients.map((patient) => patient.toJson()).toList();
-      await file.writeAsString(json.encode(jsonList));
+      const encoder = JsonEncoder.withIndent('  ');
+      await file.writeAsString(encoder.convert(jsonList));
     } catch (e) {
       print('Error saving patients: $e');
     }

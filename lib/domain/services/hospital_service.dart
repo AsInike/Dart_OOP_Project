@@ -48,6 +48,46 @@ class HospitalService {
     return bedsFreed;
   }
 
+  /// Synchronize bed status with patient assignments.
+  /// Fixes inconsistencies where beds are marked occupied but no patient assigned.
+  Future<int> syncBedAvailability() async {
+    final allBeds = await bedRepository.getAllBeds();
+    final admittedPatients = await patientRepository.getAdmittedPatients();
+    int fixedCount = 0;
+
+    // Get all bed IDs that should be occupied (have admitted patients)
+    final occupiedBedIds = admittedPatients
+        .where((p) => p.assignedBedId != null)
+        .map((p) => p.assignedBedId!)
+        .toSet();
+
+    for (final bed in allBeds) {
+      final shouldBeOccupied = occupiedBedIds.contains(bed.id);
+      final isCurrentlyOccupied = !bed.isAvailable;
+
+      // Fix mismatch
+      if (shouldBeOccupied && !isCurrentlyOccupied) {
+        // Bed should be occupied but isn't
+        bed.occupy();
+        await bedRepository.updateBed(bed);
+        fixedCount++;
+        print('Fixed: Marked bed ${bed.id} as occupied');
+      } else if (!shouldBeOccupied && isCurrentlyOccupied) {
+        // Bed should be available but isn't
+        bed.free();
+        await bedRepository.updateBed(bed);
+        fixedCount++;
+        print('Fixed: Marked bed ${bed.id} as available');
+      }
+    }
+
+    if (fixedCount > 0) {
+      print('✓ Synchronized $fixedCount bed status(es)');
+    }
+
+    return fixedCount;
+  }
+
   Future<void> addRoom({
     required String id,
     required String name,
@@ -151,15 +191,19 @@ class HospitalService {
   /// Admit a patient to the first available bed in the requested department
   Future<void> admitPatient({
     required String patientId,
-    required String name,
-    required Gender gender,
-    required int age,
     required String department,
   }) async {
     final existingPatient = await patientRepository.getPatientById(patientId);
-    if (existingPatient != null && existingPatient.isAdmitted) {
+    
+    if (existingPatient == null) {
       throw Exception(
-        'Patient with ID $patientId is already admitted to bed ${existingPatient.assignedBedId}',
+        'Patient with ID $patientId not found. Please register the patient first.',
+      );
+    }
+
+    if (existingPatient.isAdmitted) {
+      throw Exception(
+        'Patient ${existingPatient.name} is already admitted to bed ${existingPatient.assignedBedId}',
       );
     }
 
@@ -170,7 +214,40 @@ class HospitalService {
         'No available beds in department: $department',
       );
     }
+    
     final assignedBed = availableBeds.first;
+
+    final updatedPatient = Patient(
+      id: existingPatient.id,
+      name: existingPatient.name,
+      gender: existingPatient.gender,
+      age: existingPatient.age,
+      admissionDate: DateTime.now(),
+      dischargeDate: null,
+      assignedBedId: assignedBed.id,
+    );
+
+    assignedBed.occupy();
+
+    await patientRepository.updatePatient(updatedPatient);
+    await bedRepository.updateBed(assignedBed);
+
+    print('Patient ${existingPatient.name} admitted to bed ${assignedBed.id} in $department department');
+  }
+
+  /// Register a new patient (without admitting them)
+  Future<void> registerPatient({
+    required String patientId,
+    required String name,
+    required Gender gender,
+    required int age,
+  }) async {
+    final existingPatient = await patientRepository.getPatientById(patientId);
+    if (existingPatient != null) {
+      throw Exception(
+        'Patient with ID $patientId already exists',
+      );
+    }
 
     final patient = Patient(
       id: patientId,
@@ -178,19 +255,12 @@ class HospitalService {
       gender: gender,
       age: age,
       admissionDate: DateTime.now(),
-      assignedBedId: assignedBed.id,
+      dischargeDate: DateTime.now(), // Mark as not currently admitted
+      assignedBedId: null,
     );
 
-    assignedBed.occupy();
-
-    if (existingPatient == null) {
-      await patientRepository.addPatient(patient);
-    } else {
-      await patientRepository.updatePatient(patient);
-    }
-    await bedRepository.updateBed(assignedBed);
-
-    print('Patient $name admitted to bed ${assignedBed.id} in $department department');
+    await patientRepository.addPatient(patient);
+    print('Patient $name registered successfully with ID $patientId');
   }
 
   Future<void> dischargePatient(String patientId) async {
