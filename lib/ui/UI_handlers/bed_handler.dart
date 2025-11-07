@@ -1,5 +1,4 @@
-import 'package:hospital_management_system/data/patient_repository.dart';
-
+import '../../data/patient_repository.dart';
 import '../utils/menu_utils.dart';
 import 'base_handler.dart';
 

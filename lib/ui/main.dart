@@ -3,10 +3,10 @@ import '../domain/services/hospital_service.dart';
 import '../data/room_repository.dart';
 import '../data/bed_repository.dart';
 import '../data/patient_repository.dart';
-import 'handlers/room_handler.dart';
-import 'handlers/bed_handler.dart';
-import 'handlers/patient_handler.dart';
-import 'handlers/report_handler.dart';
+import 'UI_handlers/room_handler.dart';
+import 'UI_handlers/bed_handler.dart';
+import 'UI_handlers/patient_handler.dart';
+import 'UI_handlers/report_handler.dart';
 import 'utils/menu_utils.dart';
 
 class HospitalCLI {
@@ -15,7 +15,7 @@ class HospitalCLI {
   late BedHandler bedHandler;
   late PatientHandler patientHandler;
   late ReportHandler reportHandler;
-  final String dataDir = 'data';
+  late String dataDir;
 
   Future<void> initialize() async {
     print('Initializing Hospital Management System...');
@@ -28,6 +28,9 @@ class HospitalCLI {
   }
 
   Future<void> _initializeRepositories() async {
+    final scriptDir = File(Platform.script.toFilePath()).parent.parent.parent;
+    dataDir = '${scriptDir.path}/data';
+    
     await Directory(dataDir).create(recursive: true);
 
     final roomRepo = JsonRoomRepository('$dataDir/rooms.json');

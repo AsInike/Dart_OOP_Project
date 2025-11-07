@@ -116,9 +116,9 @@ class RoomHandler extends BaseHandler {
       );
 
       await hospitalService.updateRoom(updatedRoom);
-      print('✓ Room updated successfully!\n');
+      print('Room updated successfully!\n');
     } catch (e) {
-      print('✗ Error: $e\n');
+      print('Error: $e\n');
     }
   }
 
