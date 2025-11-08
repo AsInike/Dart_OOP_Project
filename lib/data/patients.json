@@ -4,9 +4,9 @@
     "name": "John Smith",
     "gender": "male",
     "age": 45,
-    "admissionDate": "2025-10-25T08:30:00.000Z",
-    "dischargeDate": "2025-10-29T12:30:32.803892",
-    "assignedBedId": "B002"
+    "admissionDate": "2025-11-07T10:29:27.227374",
+    "dischargeDate": null,
+    "assignedBedId": "B023"
   },
   {
     "id": "P002",
@@ -77,7 +77,16 @@
     "gender": "female",
     "age": 24,
     "admissionDate": "2025-11-04T11:33:08.428479",
-    "dischargeDate": null,
+    "dischargeDate": "2025-11-07T10:30:04.970174",
     "assignedBedId": "B020"
+  },
+  {
+    "id": "P009",
+    "name": "Elite",
+    "gender": "male",
+    "age": 23,
+    "admissionDate": "2025-11-07T10:27:54.470119",
+    "dischargeDate": "2025-11-07T10:27:54.470119",
+    "assignedBedId": null
   }
 ]

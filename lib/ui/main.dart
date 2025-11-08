@@ -1,8 +1,8 @@
 import 'dart:io';
 import '../domain/services/hospital_service.dart';
-import '../data/room_repository.dart';
-import '../data/bed_repository.dart';
-import '../data/patient_repository.dart';
+import '../domain/models/room.dart';
+import '../domain/models/bed.dart';
+import '../domain/models/patient.dart';
 import 'UI_handlers/room_handler.dart';
 import 'UI_handlers/bed_handler.dart';
 import 'UI_handlers/patient_handler.dart';
@@ -28,7 +28,7 @@ class HospitalCLI {
   }
 
   Future<void> _initializeRepositories() async {
-    final scriptDir = File(Platform.script.toFilePath()).parent.parent.parent;
+    final scriptDir = File(Platform.script.toFilePath()).parent.parent;
     dataDir = '${scriptDir.path}/data';
     
     await Directory(dataDir).create(recursive: true);
@@ -57,17 +57,8 @@ class HospitalCLI {
   }
 
   Future<void> _processInitialChecks() async {
-    print('Checking for expired discharges...');
-    final bedsFreed = await hospitalService.processExpiredDischarges();
-    if (bedsFreed == 0) {
-      print('No expired discharges found.');
-    }
-
-    print('Synchronizing bed availability...');
-    final bedsSynced = await hospitalService.syncBedAvailability();
-    if (bedsSynced == 0) {
-      print('All bed statuses are synchronized.');
-    }
+    await hospitalService.processExpiredDischarges();
+    await hospitalService.syncBedAvailability();
   }
 
   Future<void> run() async {

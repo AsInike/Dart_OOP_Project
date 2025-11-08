@@ -24,6 +24,14 @@ class PatientHandler extends BaseHandler {
     print('\n--- Register New Patient ---');
     try {
       final patientId = readInput('Enter Patient ID: ');
+      
+      // Check if patient ID already exists
+      final existingPatient = await hospitalService.getPatientById(patientId);
+      if (existingPatient != null) {
+        print('Error: Patient with ID $patientId already exists.');
+        return;
+      }
+      
       final name = readInput('Enter Patient Name: ');
       
       print('Gender: 1) Male  2) Female  3) Other');
@@ -59,9 +67,9 @@ class PatientHandler extends BaseHandler {
         age: age,
       );
 
-      print('✓ Patient registered successfully!\n');
+      print('Patient registered successfully.');
     } catch (e) {
-      print('✗ Error: $e\n');
+      print('Error: $e');
     }
   }
 
@@ -102,9 +110,9 @@ class PatientHandler extends BaseHandler {
         department: department,
       );
 
-      print('✓ Patient admitted successfully!\n');
+      print('Patient admitted successfully.');
     } catch (e) {
-      print('✗ Error: $e\n');
+      print('Error: $e');
     }
   }
 
@@ -132,9 +140,9 @@ class PatientHandler extends BaseHandler {
       }
 
       await hospitalService.dischargePatient(patientId);
-      print('✓ Patient discharged successfully!\n');
+      print('Patient discharged successfully.');
     } catch (e) {
-      print('✗ Error: $e\n');
+      print('Error: $e');
     }
   }
 
@@ -188,9 +196,42 @@ class PatientHandler extends BaseHandler {
     print('Name: ${patient.name}');
     print('Age: ${patient.age}, Gender: ${patient.gender}');
     print('Status: ${patient.isAdmitted ? "Admitted" : "Discharged"}');
-    print('-' * 40);
+    print('----------------------------------------');
   }
-
   Future<void> _printDetailedPatientInfo(patient) async {
-}
+    // Basic patient info
+    print('ID: ${patient.id}');
+    print('Name: ${patient.name}');
+    print('Gender: ${patient.gender}');
+    print('Age: ${patient.age}');
+
+    // Admission / discharge info
+    print('Admitted: ${patient.admissionDate.toLocal()}');
+    if (patient.dischargeDate != null) {
+      print('Discharged: ${patient.dischargeDate!.toLocal()}');
+    }
+
+    print('Status: ${patient.isAdmitted ? "Admitted" : "Discharged"}');
+
+    // Assigned bed and room (if any)
+    if (patient.assignedBedId != null) {
+      final bed = await hospitalService.getBedById(patient.assignedBedId!);
+      if (bed != null) {
+        print('Bed ID: ${bed.id}');
+        final room = await hospitalService.getRoomById(bed.roomId);
+        if (room != null) {
+          print('Room: ${room.name} (${room.department})');
+        }
+      } else {
+        print('Bed ID: ${patient.assignedBedId} (not found)');
+      }
+    }
+
+    // Length of stay
+    try {
+      print('Length of stay: ${patient.lengthOfStay} days');
+    } catch (_) {}
+
+    print('----------------------------------------');
+  }
 }

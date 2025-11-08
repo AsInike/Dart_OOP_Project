@@ -13,8 +13,7 @@ class RoomHandler extends BaseHandler {
       case '2': await viewAllRooms();
       case '3': await viewRoomsByDepartment();
       case '4': await updateRoom();
-      case '5': await deleteRoom();
-      case '6': return;
+      case '5': return;
       default: print('Invalid choice.');
     }
   }
@@ -22,6 +21,14 @@ class RoomHandler extends BaseHandler {
     print('\n--- Add New Room ---');
     try {
       final id = readInput('Enter Room ID: ');
+      
+      // Check if room ID already exists
+      final existingRoom = await hospitalService.getRoomById(id);
+      if (existingRoom != null) {
+        print('Error: Room with ID $id already exists.');
+        return;
+      }
+      
       final name = readInput('Enter Room Name: ');
       final department = readInput('Enter Department: ');
       final capacityStr = readInput('Enter the numbers of bed in this room: ');
@@ -39,9 +46,9 @@ class RoomHandler extends BaseHandler {
         capacity: capacity,
       );
 
-      print('✓ Room added successfully!\n');
+      print('Room added successfully.');
     } catch (e) {
-      print('✗ Error: $e\n');
+      print('Error: $e');
     }
   }
 
@@ -121,7 +128,4 @@ class RoomHandler extends BaseHandler {
       print('Error: $e\n');
     }
   }
-
-  Future<void> deleteRoom() async {
-}
 }

@@ -30,11 +30,17 @@ class ReportHandler extends BaseHandler {
       print('  Total Beds: ${entry.value['total']}');
       print('  Occupied: ${entry.value['occupied']}');
       print('  Available: ${entry.value['available']}');
-      print('-' * 40);
+      print('----------------------------------------');
     }
-    print("");
   }
 
   Future<void> viewDetailedReport() async {
-}
+    print('\n--- Generating Detailed Hospital Report ---');
+    try {
+      final report = await hospitalService.generateDetailedReport();
+      print(report);
+    } catch (e) {
+      print('Error generating report: $e');
+    }
+  }
 }

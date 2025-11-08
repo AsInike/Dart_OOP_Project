@@ -58,5 +58,17 @@
     "name": "ICU Room 3",
     "department": "Intensive Care",
     "capacity": 5
+  },
+  {
+    "id": "R011",
+    "name": "Lung Surgery",
+    "department": "Surgery",
+    "capacity": 5
+  },
+  {
+    "id": "R012",
+    "name": "ICU Room 4",
+    "department": "Intensive Care",
+    "capacity": 5
   }
 ]

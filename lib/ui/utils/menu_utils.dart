@@ -17,8 +17,7 @@ class MenuUtils {
     print('2. View All Rooms');
     print('3. View Rooms by Department');
     print('4. Update Room');
-    print('5. Delete Room');
-    print('6. Back to Main Menu');
+    print('5. Back to Main Menu');
   }
 
   static void displayBedMenu() {

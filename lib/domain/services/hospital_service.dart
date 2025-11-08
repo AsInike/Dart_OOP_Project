@@ -2,9 +2,6 @@ import '../models/room.dart';
 import '../models/bed.dart';
 import '../models/patient.dart';
 import '../models/enums.dart';
-import '../../data/room_repository.dart';
-import '../../data/bed_repository.dart';
-import '../../data/patient_repository.dart';
 
 class HospitalService {
   final RoomRepository roomRepository;
@@ -34,15 +31,12 @@ class HospitalService {
           bed.free();
           await bedRepository.updateBed(bed);
           bedsFreed++;
-
-          print(
-              'Auto-freed bed ${bed.id} for patient ${patient.name} (discharge date: ${patient.dischargeDate})');
         }
       }
     }
 
     if (bedsFreed > 0) {
-      print('✓ Processed $bedsFreed expired discharge(s) and freed beds');
+      // Beds freed from expired discharges
     }
 
     return bedsFreed;
@@ -67,22 +61,18 @@ class HospitalService {
 
       // Fix mismatch
       if (shouldBeOccupied && !isCurrentlyOccupied) {
-        // Bed should be occupied but isn't
         bed.occupy();
         await bedRepository.updateBed(bed);
         fixedCount++;
-        print('Fixed: Marked bed ${bed.id} as occupied');
       } else if (!shouldBeOccupied && isCurrentlyOccupied) {
-        // Bed should be available but isn't
         bed.free();
         await bedRepository.updateBed(bed);
         fixedCount++;
-        print('Fixed: Marked bed ${bed.id} as available');
       }
     }
 
     if (fixedCount > 0) {
-      print('✓ Synchronized $fixedCount bed status(es)');
+      // Bed availability synchronized
     }
 
     return fixedCount;
@@ -232,7 +222,7 @@ class HospitalService {
     await patientRepository.updatePatient(updatedPatient);
     await bedRepository.updateBed(assignedBed);
 
-    print('Patient ${existingPatient.name} admitted to bed ${assignedBed.id} in $department department');
+    print('Patient admitted successfully');
   }
 
   /// Register a new patient (without admitting them)
@@ -260,7 +250,7 @@ class HospitalService {
     );
 
     await patientRepository.addPatient(patient);
-    print('Patient $name registered successfully with ID $patientId');
+    print('Patient registered successfully');
   }
 
   Future<void> dischargePatient(String patientId) async {
@@ -289,7 +279,7 @@ class HospitalService {
     );
     await patientRepository.updatePatient(dischargedPatient);
 
-    print('Patient ${patient.name} discharged from bed ${patient.assignedBedId}');
+    print('Patient discharged');
   }
 
   Future<List<Patient>> getAllPatients() async {

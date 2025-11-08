@@ -97,7 +97,7 @@
   {
     "id": "B020",
     "roomId": "R006",
-    "status": "occupied"
+    "status": "available"
   },
   {
     "id": "B021",
@@ -112,7 +112,7 @@
   {
     "id": "B023",
     "roomId": "R007",
-    "status": "available"
+    "status": "occupied"
   },
   {
     "id": "B024",
@@ -127,11 +127,6 @@
   {
     "id": "B027",
     "roomId": "R008",
-    "status": "available"
-  },
-  {
-    "id": "B028",
-    "roomId": "R009",
     "status": "available"
   }
 ]
