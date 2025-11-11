@@ -1,7 +1,32 @@
 import 'dart:io';
 import 'dart:convert';
-import 'enums.dart';
 import 'room.dart';
+
+enum BedStatus {
+  available,
+  occupied;
+
+  @override
+  String toString() {
+    switch (this) {
+      case BedStatus.available:
+        return 'Available';
+      case BedStatus.occupied:
+        return 'Occupied';
+    }
+  }
+
+  static BedStatus fromString(String status) {
+    switch (status.toLowerCase()) {
+      case 'available':
+        return BedStatus.available;
+      case 'occupied':
+        return BedStatus.occupied;
+      default:
+        throw ArgumentError('Invalid bed status: $status');
+    }
+  }
+}
 
 class Bed {
   final String id;

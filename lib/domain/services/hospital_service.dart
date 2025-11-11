@@ -1,7 +1,6 @@
 import '../models/room.dart';
 import '../models/bed.dart';
 import '../models/patient.dart';
-import '../models/enums.dart';
 
 class HospitalService {
   final RoomRepository roomRepository;

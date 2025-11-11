@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:hospital_management_system/domain/models/room.dart';
 import 'package:hospital_management_system/domain/models/bed.dart';
 import 'package:hospital_management_system/domain/models/patient.dart';
-import 'package:hospital_management_system/domain/models/enums.dart';
 import 'package:hospital_management_system/domain/services/hospital_service.dart';
 
 void main() {

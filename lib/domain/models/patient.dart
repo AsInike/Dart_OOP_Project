@@ -1,6 +1,36 @@
 import 'dart:io';
 import 'dart:convert';
-import 'enums.dart';
+
+enum Gender {
+  male,
+  female,
+  other;
+
+  @override
+  String toString() {
+    switch (this) {
+      case Gender.male:
+        return 'Male';
+      case Gender.female:
+        return 'Female';
+      case Gender.other:
+        return 'Other';
+    }
+  }
+
+  static Gender fromString(String gender) {
+    switch (gender.toLowerCase()) {
+      case 'male':
+        return Gender.male;
+      case 'female':
+        return Gender.female;
+      case 'other':
+        return Gender.other;
+      default:
+        throw ArgumentError('Invalid gender: $gender');
+    }
+  }
+}
 
 class Patient {
   final String id;

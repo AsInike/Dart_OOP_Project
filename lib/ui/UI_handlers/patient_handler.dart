@@ -1,5 +1,5 @@
 import '../utils/menu_utils.dart';
-import '../../domain/models/enums.dart';
+import '../../domain/models/patient.dart';
 import 'base_handler.dart';
 
 class PatientHandler extends BaseHandler {
