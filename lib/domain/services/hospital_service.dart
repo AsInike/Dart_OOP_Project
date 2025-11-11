@@ -14,8 +14,7 @@ class HospitalService {
     required this.patientRepository,
   });
 
-  /// Process patients with past discharge dates and free their beds.
-  /// Should be called when the system starts up.
+ 
   Future<int> processExpiredDischarges() async {
     final now = DateTime.now();
     final allPatients = await patientRepository.getAllPatients();
@@ -36,7 +35,6 @@ class HospitalService {
     }
 
     if (bedsFreed > 0) {
-      // Beds freed from expired discharges
     }
 
     return bedsFreed;
